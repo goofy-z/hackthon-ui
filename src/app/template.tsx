@@ -34,18 +34,18 @@ export default function RootTemplate({
             },
             {
               icon: <AiFillBook />,
-              label: '话术辅助',
+              label: '销冠说',
               route: '/huashu'
+            },
+            {
+              icon: <AiFillBook />,
+              label: '快复盘',
+              route: '/kuaifupan'
             },
             {
               icon: <AiFillBook />,
               label: '早洞察',
               route: '/zaodongcha'
-            },
-            {
-              icon: <AiFillBook />,
-              label: '摘要评价',
-              route: '/zhaiyao'
             },
             {
               icon: <AiFillBook />,

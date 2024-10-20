@@ -1,6 +1,6 @@
 'use client'
 
-import { useStore } from "@/store"
+import { useRouter } from "next/navigation"
 import { Button, Avatar, Layout, List, Steps, Divider, Row, Col, Space} from "antd"
 import { FC, useEffect, useState } from "react"
 interface IProps { }
@@ -108,6 +108,7 @@ const HuaShuView: FC<IProps> = ({ }) => {
       clearInterval(intervalTick)
     }
   }, [])
+  const router = useRouter()
   return <>
     <Layout className="tw-flex"
           style={{ padding: '5px 0', width: "100%", height: "100%"}}
@@ -162,17 +163,19 @@ const HuaShuView: FC<IProps> = ({ }) => {
           </Layout>
           <Divider type="vertical" />
           <Layout.Sider width={450} style={{ padding: '5px 5px', background: "#ffffff"}}>
-            <Divider style={{  borderColor: '#7cb305' }}>客户内容</Divider>
+            <Divider orientation="left">客户内容</Divider>
             <p>
             {custom}
             </p>
-            <Divider style={{  borderColor: '#7cb305' }}>销售辅助</Divider>
+            <Divider orientation="left">话术辅助</Divider>
             <p>
             {fuzhu}
             </p>
             {aixiaojie.length === 0 ? null : <>
-              <Divider style={{  borderColor: '#7cb305' }}>{aixiaojie[0]}</Divider>
+              <Divider orientation="left">{aixiaojie[0]}</Divider>
             <p>{aixiaojie[1]}</p>
+            <Divider></Divider>
+            <p className="tw-text-center"><Button style={{marginRight: 0}} type="primary" onClick={() => {router.push('/快复盘')}}>前往会话摘要</Button></p>
             </>}
           </Layout.Sider>
     </Layout>
