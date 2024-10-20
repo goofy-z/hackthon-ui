@@ -47,11 +47,11 @@ export default function RootTemplate({
               label: '早洞察',
               route: '/zaodongcha'
             },
-            // {
-            //   icon: <AiFillBook />,
-            //   label: '销售物料',
-            //   route: '/sales'
-            // }
+            {
+              icon: <AiFillBook />,
+              label: '销售物料',
+              route: '/sales'
+            }
           ]}>
           {children}
         </MainLayout>
