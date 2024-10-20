@@ -151,6 +151,7 @@ const HaokelaiView: FC<IProps> = ({ }) => {
             /> */}
 
           <ProChat
+              assistantMeta={{ avatar: '/statics/客服机器人.png', title: '三体世界', backgroundColor: '#67dedd' }}
               style={{ height: "100%" }}
               helloMessage={
                 '欢迎使用 好客来 ，我是你的专属机器人'
@@ -159,9 +160,9 @@ const HaokelaiView: FC<IProps> = ({ }) => {
                 setTimeCounter(-1)
                 let mockedData: string = `这是一段模拟的对话数据。本次会话传入了${messages.length}条消息`;
                 setData(undefined)
-                ListHakkelaiApi(messages).payload.then((r) => {
+                ListHakkelaiApi(messages[0].content).payload.then((r) => {
                   const d:ApiValueResponse = (r as ApiResponse).value
-                  mockedData = d.answer_text
+                  mockedData = d.answer_text.replace(/打电话/g, "[打电话](http://192.168.68.18:3000/huashu)")
                   setData(d)
                 });
                 await sleep(12000);

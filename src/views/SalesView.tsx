@@ -29,6 +29,14 @@ interface DataType {
   tags: string[];
 }
 
+interface DataType2 {
+  key: number;
+  title: string;
+  date: string;
+  age: string;
+  tags: string[];
+}
+
 const columns: ColumnsType<DataType> = [
   {
     title: 'Name',
@@ -72,7 +80,7 @@ const columns2: ColumnsType<DataType> = [
   {
     title: 'Name',
     dataIndex: 'name',
-    key: 'name',
+    key: 'title',
     render: (text) => <a>{text}</a>,
   },
   {
@@ -144,18 +152,74 @@ const data1 = [
   ["40.2%", "12.8%"],
 ]
 
-const data3 = [
+const hangyezhengce = [
   {
+    key: 1,
     title: 'Ant Design Title 1',
+    age: '黎巴嫩通信设备爆炸事件后，中东电子订单并未大规模转向中国大陆。传言称因安全原因订单转移，华强北对讲机询价增加，但实际订单未见显著变化。尽管如此，海能达股价因可能受益于订单转移大幅上涨。华强北和泉州的对讲机生产并未明显增加订单。中东电子工业薄弱，主要依赖进口，中国仍是主要的出口国，但市场影响有限。',
+    date: "2024/10/12",
+    new_source: "界面新闻",
+    tags: ["通讯电子产品"],
   },
   {
-    title: 'Ant Design Title 2',
+    key: 2,
+    title: 'Ant Design Title 1',
+    age: '黎巴嫩通信设备爆炸事件后，中东电子订单并未大规模转向中国大陆。传言称因安全原因订单转移，华强北对讲机询价增加，但实际订单未见显著变化。尽管如此，海能达股价因可能受益于订单转移大幅上涨。华强北和泉州的对讲机生产并未明显增加订单。中东电子工业薄弱，主要依赖进口，中国仍是主要的出口国，但市场影响有限。',
+    date: "2024/10/12",
+    new_source: "界面新闻",
+    tags: ["通讯电子产品"],
   },
   {
-    title: 'Ant Design Title 3',
+    key: 3,
+    title: 'Ant Design Title 1',
+    age: '黎巴嫩通信设备爆炸事件后，中东电子订单并未大规模转向中国大陆。传言称因安全原因订单转移，华强北对讲机询价增加，但实际订单未见显著变化。尽管如此，海能达股价因可能受益于订单转移大幅上涨。华强北和泉州的对讲机生产并未明显增加订单。中东电子工业薄弱，主要依赖进口，中国仍是主要的出口国，但市场影响有限。',
+    date: "2024/10/12",
+    new_source: "界面新闻",
+    tags: ["通讯电子产品"],
+  }
+];
+
+const columnszhengce: ColumnsType<DataType2> = [
+  {
+    title: '新闻标题',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text) => <a>{text}</a>,
   },
   {
-    title: 'Ant Design Title 4',
+    title: '新闻概要',
+    dataIndex: 'age',
+    key: 'age',
+  },
+  {
+    title: '新闻来源',
+    dataIndex: 'address',
+    key: 'address',
+  },
+  {
+    title: '行业',
+    key: 'tags',
+    dataIndex: 'tags',
+    render: (tags: string[]) => (
+      <span>
+        {tags.map((tag) => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </span>
+    ),
+  },
+  {
+    title: '新闻日期',
+    dataIndex: 'date',
+    key: 'date',
   },
 ];
 
@@ -276,6 +340,7 @@ const SalesView: FC<IProps> = ({ }) => {
                 defaultActiveKey={['1']}
                 ghost
                 items={[{ key: '1', label: '出口现状分析', children: 
+                  <>
                   <div className='tw-flex tw-justify-between'>
                   {
                     firm < 5 ? <>
@@ -293,15 +358,56 @@ const SalesView: FC<IProps> = ({ }) => {
                     style={{padding: "0 10px"}}
                     src={`/statics/sales/firm1-2-2.png`}
                   />
+              
                     </> : null
                   }
                   </div>
+                  <div className='tw-flex tw-justify-between'>
+                  {
+                    firm < 5 ? <>
+                    <Image
+                      preview={false}
+                      width={650}
+                      height={300}
+                      style={{padding: "0 10px"}}
+                      src={`/statics/sales/firm1-2-1.png`}
+                    />
+                    <Image
+                    preview={false}
+                    width={650}
+                    height={300}
+                    style={{padding: "0 10px"}}
+                    src={`/statics/sales/firm1-2-2.png`}
+                  />
+              
+                    </> : null
+                  }
+                  </div>
+                  </>
+                  
               }]}
               />
               
+              
+            <Collapse
+                defaultActiveKey={['1']}
+                ghost
+                items={[{ key: '1', label: '行业政策+动向解读', children: 
+                  <Table<DataType2>
+                    pagination={false}
+                    showHeader={false}
+                    columns={columnszhengce}
+                    dataSource={hangyezhengce}
+                    bordered
+                    title={() => 'Header'}
+                  />
+
+              }]}
+              />
+
               <Divider>XT福利+动态</Divider>
               <List
-                bordered
+                
                 itemLayout="horizontal">
                   <List.Item.Meta
                     title={<><Typography.Link>10月大礼包来了！结汇手续费降低10%，速来结汇！</Typography.Link><span style={{marginLeft: "20px"}}> ——2024.10.01</span></>}>
@@ -321,7 +427,7 @@ const SalesView: FC<IProps> = ({ }) => {
                 </List>
                 <Divider>XT技术革新</Divider>
                 <List
-                bordered
+                
                 itemLayout="horizontal" className='tw-flex'>
                   <List.Item.Meta
                     title={<><Typography.Link>OCR识别全新升级！支持越南语等小语种，快来试试吧</Typography.Link><span style={{marginLeft: "20px"}}>—— 2024.09.08</span></>}>
@@ -334,7 +440,6 @@ const SalesView: FC<IProps> = ({ }) => {
                   />
                 </List>
             </Drawer>
-            
 
           </Layout>
           <Layout style={{ padding: '5px 0', background: "#ffffff"}}>

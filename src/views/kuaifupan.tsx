@@ -141,7 +141,7 @@ s: 哎，好，拜拜哎。`,
       },
     },
     {
-      content: `| 字段名称               | 描述                                                         |
+      content: `| 要点名称               | 描述                                                         |
 |------------------------|--------------------------------------------------------------|
 | 是否为目标客户         | 是                                                           |
 | 客户出口类型           | 自营出口                                                     |
@@ -236,7 +236,7 @@ s: 哎，好，拜拜哎。`,
 |  | - 询问流水量：未询问 | 0分 |
 |  | - 提出解决方案：销售详细介绍了香港账户的优势和服务方案 | 5分 |
 |  | - 申请加微：销售主动提出添加微信并获得客户同意 | 5分 |
-| 总评分 | 目标达成：80分, SOP执行：16分, 总分：96分 | - |`,
+| 总评分 | 目标达成：80分, SOP执行：16分 | 96分 |`,
       createAt: 1697862247302,
       id: 'Sb5pAzL2',
       role: 'assistant',
@@ -387,14 +387,15 @@ const columns: ColumnsType<DataType> = [
         >
           <Layout style={{ padding: '5px 0', marginBottom: "10"}}>
             <Table<DataType>
+              size={"small"}
                   rowSelection={{}}
                   pagination={false}
                   columns={columns}
                   dataSource={data}
                   bordered
                 />
-            <Divider></Divider>
             <ProChat
+              assistantMeta={{ avatar: '/statics/客服机器人.png', title: '三体世界', backgroundColor: '#67dedd' }}
               style={{ height: "100%" }}
               helloMessage={
                 '欢迎使用 快复盘 ，选择上方对话摘要向我提问'
@@ -414,14 +415,14 @@ const columns: ColumnsType<DataType> = [
                   <a
                     style={{background: "rgb(243, 243, 243)", marginRight: "20px"}}
                     key="user"
-                    onClick={() => {setChats(example2.chats)}}
+                    onClick={() => {setChats(example3.chats)}}
                   ><CommentOutlined />
                     <span>帮我制定一个话术优化计划</span>
                   </a>
                   <a
                     style={{background: "rgb(243, 243, 243)", marginRight: "20px"}}
                     key="user"
-                    onClick={() => {setChats(example3.chats)}}
+                    onClick={() => {setChats(example2.chats)}}
                   ><CommentOutlined />
                     <span>帮我总结一下会话要点</span>
                   </a>

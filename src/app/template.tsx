@@ -22,11 +22,11 @@ export default function RootTemplate({
         <MainLayout
           title='XTransfer Boss'
           menuItems={[
-            {
-              icon: <AiFillBook />,
-              label: '增长魔方',
-              route: '/home'
-            },
+            // {
+            //   icon: <AiFillBook />,
+            //   label: '增长魔方',
+            //   route: '/home'
+            // },
             {
               icon: <AiFillBook />,
               label: '好客来',
@@ -47,11 +47,11 @@ export default function RootTemplate({
               label: '早洞察',
               route: '/zaodongcha'
             },
-            {
-              icon: <AiFillBook />,
-              label: '销售物料',
-              route: '/sales'
-            }
+            // {
+            //   icon: <AiFillBook />,
+            //   label: '销售物料',
+            //   route: '/sales'
+            // }
           ]}>
           {children}
         </MainLayout>

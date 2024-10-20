@@ -13,10 +13,11 @@ const HomeView: FC<IProps> = ({ }) => {
       <ProChat
         style={{ height: "100%" }}
         helloMessage={
-          '欢迎使用 ProChat ，我是你的专属机器人'
+          '欢迎使用 增长魔方 ，我是你的专属机器人'
         }
+        assistantMeta={{ avatar: '/statics/客服机器人.png', title: '三体世界', backgroundColor: '#67dedd' }}
         request={async (messages) => {
-          const mockedData: string = `这是一段模拟的对话数据。本次会话传入了${messages.length}条消息`;
+          const mockedData: string = `我不太理解你的意思，我还在成长中，请多包涵～～`;
           return new Response(mockedData);
         }}
       />
