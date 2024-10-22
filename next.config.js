@@ -25,6 +25,10 @@ module.exports = withBundleAnalyzer(
           source: '/haokelai/:path*',
           destination: `http://atta-ai-crm.sitxt52.sh/:path*`,
         },
+        {
+          source: '/zhaiyao/:path*',
+          destination: `http://atta-ai-predcall.sitxt52.sh/:path*`,
+        },
       ];
     },
     async redirects() {

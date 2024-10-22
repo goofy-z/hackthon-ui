@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { Flex } from "antd"
 import HomeView from "@/views/HomeView"
-//import SalesView from "@/views/SalesView"
+// import SalesView from "@/views/SalesView"
 
 export const metadata: Metadata = {
   title: 'Next.js - Home'

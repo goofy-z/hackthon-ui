@@ -160,19 +160,27 @@ const HaokelaiView: FC<IProps> = ({ }) => {
                 setTimeCounter(-1)
                 let mockedData: string = `这是一段模拟的对话数据。本次会话传入了${messages.length}条消息`;
                 setData(undefined)
-                ListHakkelaiApi(messages[0].content).payload.then((r) => {
+                const useMsg = messages[messages.length - 1].content
+                
+                await ListHakkelaiApi(messages[messages.length - 1].content).payload.then((r) => {
                   const d:ApiValueResponse = (r as ApiResponse).value
-                  mockedData = d.answer_text.replace(/打电话/g, "[打电话](http://192.168.68.18:3000/huashu)")
+                  mockedData = d?.answer_text.replace(/打电话/g, "[打电话](http://192.168.69.20:3000/huashu)")
                   setData(d)
                 });
-                await sleep(12000);
+                if (mockedData === undefined){
+                  mockedData = "暂时不能理解你的意思，我在努力学习中～"
+                } else if (useMsg.includes("转介绍")){
+                  await sleep(6000);
+                } else {
+                  await sleep(10000);
+                }
                 return new Response(mockedData);
               }}
             />
           </Layout>
           <Divider type="vertical" />
           <Layout.Sider width={450} style={{ padding: '5px 5px', background: "#ffffff"}}>
-            {apidata && apidata.rec_reasons_A.length !== 0 ? <>
+            {apidata && apidata.rec_reasons_A && apidata.rec_reasons_A.length !== 0 ? <>
               <Space>
                 <Divider style={{  borderColor: '#7cb305' }}>知识图谱推理</Divider>
               </Space>
@@ -183,7 +191,7 @@ const HaokelaiView: FC<IProps> = ({ }) => {
                 items={apidata.rec_reasons_A}
               />
             </> : null}
-            {apidata && apidata.rec_reasons_B.length !== 0 ? <>
+            {apidata && apidata.rec_reasons_B && apidata.rec_reasons_B.length !== 0 ? <>
               <Space>
                 <Divider style={{  borderColor: '#7cb305' }}>搜索排序</Divider>
               </Space>

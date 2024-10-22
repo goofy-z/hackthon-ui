@@ -16,9 +16,23 @@ const gethaokelaiUrl = (relativeUrl: string) => {
     return '/haokelai' + relativeUrl;
   }
 
+const getzhaiyaoUrl = (relativeUrl: string) => {
+    return '/zhaiyao' + relativeUrl;
+  }
+
 class Services {
   static listhaokelai({ data, success, error }: ListMetaParams): JQuery.jqXHR {
     return $.ajax(gethaokelaiUrl('/ai_hackmason_leads?biz_name=test&request_id=asdf&asyn=0&routing_key=lyj'), {
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify(data),
+      success: success,
+      error: error,
+    });
+  }
+  static getzhaiyao({ data, success, error }: ListMetaParams): JQuery.jqXHR {
+    return $.ajax(getzhaiyaoUrl('/dialogue_summary?asyn=0&request_id=20240624102209038_581&biz_name=qq'), {
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json; charset=utf-8',

@@ -1,8 +1,9 @@
 'use client'
 
 import { useRouter } from "next/navigation"
-import { Button, Avatar, Layout, List, Steps, Divider, Row, Col, Space} from "antd"
+import { Button, Avatar, Layout, List, Steps, Divider, Col, Space} from "antd"
 import { FC, useEffect, useState, useRef } from "react"
+import { PhoneOutlined } from '@ant-design/icons'
 interface IProps { }
 
 function sleep(ms: number): Promise<void> {
@@ -11,10 +12,11 @@ function sleep(ms: number): Promise<void> {
 
 interface MessageInterface {
   id: any,
-  content: any,
+  content: string,
   isCustom: any,
   isEnd: any,
-  fuzhu: any
+  fuzhu: any,
+  hightlight: Array<string> | undefined,
 }
 
 // 预设的对话内容
@@ -24,14 +26,16 @@ const FixMessages = [
     content: '哎，您好，哎，打扰您一下。呃，我们呢是帮外贸公司啊免费开通香港离岸账户的啊，可以无限额结汇到个人卡。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ""
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 2,
     content: '你好。',
     isCustom: true,
     isEnd: false,
-    fuzhu: ""
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 3,
@@ -54,14 +58,16 @@ const FixMessages = [
 2. 央企招商局创投领投，合作知名银行
 3. 多个城市分公司，人物、活动案例
 4. 政府报道，业内排名
-`
+`,
+    hightlight: ['由央企招商局创投领投的企业', '成立第8年了', '目前累计服务55W加外贸企业', 'toB外贸收款的第一大平台']
   },
   {
     id: 4,
     content: '我们是那个x transfer，专注为外贸企业提供收汇、结汇服务的，就是说可以帮企业免费开一个香港的离岸账户。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ''
+    fuzhu: '',
+    hightlight: []
   },
   {
     id: 5,
@@ -74,28 +80,32 @@ const FixMessages = [
 
 回答要点:
 同名充值
-`
+`,
+    hightlight: ['免费开户', '没有年费管理费', '同名充值']
   },
   {
     id: 6,
     content: '嗯，好的。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 7,
     content: '但是哦您是离岸账户和公账一起搭配使用吧。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 8,
     content: '因为离岸账户的话是没有结汇通道的，就是说不能把人民币结汇到国内这种。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 9,
@@ -112,28 +122,32 @@ const FixMessages = [
 政策支持 
 离岸账户优势 
 安全性和监管 
-`
+`,
+  hightlight: ['接收全球多币种支付', '支持全球转账和结汇', '提供全球收款服务。国家最新的结汇政策允许您将国际贸易货款无需限额地结汇到您的国内个人账户']
   },
   {
     id: 10,
     content: '是这样的，香港账户对于您的业务开展有很大好处的。它能够收取实物贸易的货款，可以接收全球多币种支付，支持全球转账和结汇。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 11,
     content: '呃，那您不管是国内公司还是香港公司，或者说有境外公司，都可以在线来做审核。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 12,
     content: '就是您收款之后，它可以把这个钱直接提到您国内的个人银行卡，或者说转到公户退税都可以的。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 13,
@@ -147,105 +161,120 @@ const FixMessages = [
 开户免费 
 结汇手续费低 
 转账不限制金额收费 
-`
+`,  
+    hightlight: ['开户是免费的', '没有任何年费或管理费', '手续费在千分之一到千分之四之间', '不限金额。']
   },
   {
     id: 12,
     content: '对，我们的话呢，给您开的香港账户是绝对安全的哈，因为的话是这样子的。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 13,
     content: '就是我们给您开的香港账户的话，是通过叉t的方式去新开，是新开户的嘛。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 14,
     content: '像叉t的话呢，也是就是招商局创投，就是央央行就央企招商局创投去进行投资的一个企业。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 15,
     content: '然后我们其实做这个b two b的一个呃就是收收收款和付款的一个情况的话呢，也做了将近七年了。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 16,
     content: '从二零从二零一七年就开始做了，做到现在了，也就将近有四十五万的客户也是在用我们这个账户，所以你您这边尽管放心使用就行。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 17,
     content: '能多问一下，咱们是做什么产品出口的呀？',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 18,
     content: '皮革，包括说这个羽毛制品，还有这个鞋业。',
     isCustom: true,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 19,
     content: '主要出口到哪个国家呀？',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 20,
     content: '嗯，欧洲、德国啊那些比较多了。',
     isCustom: true,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 21,
     content: '欧洲、德国啊，那咱们这边走走公账的话，会不会就是说比较麻烦那些？',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 22,
     content: '还好吧',
     isCustom: true,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 23,
     content: '因为是是这样的，就是我们x transfer的话也是做作为一个帮外贸就是呃收款的嘛，',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 233,
     content: '而且我们这边就是相对来说会比较便捷，然后也是可以帮企业规避风险这一块的。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 24,
     content: '也看一下您这边看有没有说兴趣去多了解一个平台嘛。',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 25,
@@ -253,65 +282,51 @@ const FixMessages = [
     isCustom: true,
     isEnd: false,
     fuzhu: `销冠话术： 
-啊，好，那我可以先加您微信，把详细资料发给您嘛。`
+啊，好，那我可以先加您微信，把详细资料发给您嘛。`,
+    hightlight: []
   },
   {
     id: 26,
     content: '嗯，行，我我加您个微信，您先忙，我给您发点资料。是这个手机号吗？',
     isCustom: false,
     isEnd: false,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
   {
     id: 27,
     content: '对',
     isCustom: true,
     isEnd: true,
-    fuzhu: ``
+    fuzhu: "",
+    hightlight: []
   },
-  // {
-  //   id: 4,
-  //   content: '很高兴为你服务，请问有什么可以帮助你的？4',
-  //   isCustom: true,
-  //   isEnd: false,
-  //   fuzhu: "别说话"
-  // },
-  // {
-  //   id: 5,
-  //   content: '很高兴为你服务，请问有什么可以帮助你的？5',
-  //   isCustom: false,
-  //   isEnd: false,
-  //   fuzhu: ""
-  // },
-  // {
-  //   id: 6,
-  //   content: '很高兴为你服务，请问有什么可以帮助你的？6',
-  //   isCustom: true,
-  //   isEnd: false,
-  //   fuzhu: "别说话"
-  // },
-  // {
-  //   id: 7,
-  //   content: '很高兴为你服务，请问有什么可以帮助你的？7',
-  //   isCustom: false,
-  //   isEnd: false,
-  //   fuzhu: ""
-  // },
-  // {
-  //   id: 8,
-  //   content: '很高兴为你服务，请问有什么可以帮助你的？8',
-  //   isCustom: true,
-  //   isEnd: true,
-  //   fuzhu: "别说话"
-  // }
-  // ... 更多预设对话内容
 ];
+
+function HighlightText(text: string | undefined, highlights: string[] | undefined) {
+  if (text === undefined || highlights === undefined){
+    return ""
+  }
+  // 创建一个正则表达式，用于匹配所有要高亮的字符串
+  const regexes = highlights.map((highlight) => {
+    const regex = new RegExp(`(${highlight})`, 'gi');
+    return regex;
+  });
+
+  // 遍历所有的正则表达式，并对文本进行替换
+  let resultText = text;
+  regexes.forEach((regex) => {
+    resultText = resultText.replace(regex, (match) => `<span style="background-color: red; color: white; padding: 5px;">${match}</span>`);
+  });
+
+  return resultText;
+}
 
 const HuaShuView: FC<IProps> = ({ }) => {
   const [message, setMessages] = useState<Array<MessageInterface>>([])
   const [aixiaojie, setAIxiaojie] = useState<Array<any>>([])
   const [loading, setLoading] = useState<Boolean>(false)
-  const [fuzhu, setFuzhu] = useState<string>("")
+  const [fuzhu, setFuzhu] = useState<MessageInterface>()
   const [custom, setCustom] = useState<string>("")
   const listRef = useRef<HTMLElement>(null);
   const [timeCounter, setTimeCounter] = useState<number>(-999999)
@@ -323,11 +338,11 @@ const HuaShuView: FC<IProps> = ({ }) => {
         for (let i=0 ;i<min_index;i++){
           console.log(tmp, v)
           tmp.push(FixMessages[i])
-          if (listRef !== null && listRef.current && v < 28){
+          if (listRef !== null && listRef.current && v < 31){
             listRef.current.scrollTop = listRef.current.scrollHeight + 200;
           }
         }
-        // if (FixMessages.length < v+1){
+        // if (FixMessages.length < v+5){
         //   clearInterval(intervalTick)
         // }
         
@@ -349,7 +364,7 @@ const HuaShuView: FC<IProps> = ({ }) => {
           <Layout style={{ padding: '5px 0', background: "#ffffff"}}>
           <List.Item className="tw-text-center tw-flex">
               <div style={{marginRight: 0, width: "100%"}}>
-                <Button style={{marginRight: 0}} loading={loading} onClick={() => {setTimeCounter(-1); setLoading(true); if(!loading){setMessages([])}}}>{loading ? "电话接通中" : "拨打电话"}</Button>
+                <Button icon={<PhoneOutlined />} loading={loading} onClick={() => {setTimeCounter(0); setLoading(true); if(!loading){setMessages([])}}}>{loading ? "电话接通中" : "拨打电话"}</Button>
               </div>
               </List.Item>
             <List
@@ -360,7 +375,8 @@ const HuaShuView: FC<IProps> = ({ }) => {
               itemLayout="horizontal"
               dataSource={message}
               renderItem={(item) => {
-                let conver = <>{  
+                let conver = <>
+                {  
                   item.isCustom ? 
                   <List.Item style={{ display: 'flex', justifyContent: item.isCustom ? 'flex-start' : 'flex-end' }}>
                     <Avatar style={{marginLeft: 20}} size="large" src="/statics/客户头像.png" />
@@ -376,7 +392,7 @@ const HuaShuView: FC<IProps> = ({ }) => {
                   </List.Item>}</>
                 setLoading(!item.isEnd)
                 if (item.isCustom){
-                  setFuzhu(item.fuzhu)
+                  setFuzhu(item)
                   setCustom(item.content)
                 }
                 return <>
@@ -403,7 +419,9 @@ const HuaShuView: FC<IProps> = ({ }) => {
             </pre>
             <Divider orientation="left">话术辅助</Divider>
             <pre style={{wordWrap: "break-word", overflow: "auto", whiteSpace: "pre-wrap"}}>
-            {fuzhu}
+            <div>
+              <div dangerouslySetInnerHTML={{ __html: HighlightText(fuzhu?.fuzhu, fuzhu?.hightlight) }} />
+            </div>
             </pre>
             {aixiaojie.length === 0 ? null : <>
               <Divider orientation="left">{aixiaojie[0]}</Divider>

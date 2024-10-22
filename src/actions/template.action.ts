@@ -27,4 +27,11 @@ export const ListHakkelaiApi = (question: any) => {
       type: "LIST_META_DATA",
       payload: wrapDeferred(Services.listhaokelai, {question}),
   };
-};
+}
+
+export const ZhaiyaoApi = (session: any, text: any) => {
+  return {
+      type: "LIST_ZHAI_YAO",
+      payload: wrapDeferred(Services.getzhaiyao, {session, text, type: "other"}),
+  };
+}
