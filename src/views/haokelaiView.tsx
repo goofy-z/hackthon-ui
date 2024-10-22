@@ -164,7 +164,7 @@ const HaokelaiView: FC<IProps> = ({ }) => {
                 
                 await ListHakkelaiApi(messages[messages.length - 1].content).payload.then((r) => {
                   const d:ApiValueResponse = (r as ApiResponse).value
-                  mockedData = d?.answer_text.replace(/打电话/g, "[打电话](http://192.168.69.20:3000/huashu)")
+                  mockedData = d?.answer_text.replace(/打电话/g, "[打电话](http://180.163.119.119:3000/huashu)")
                   setData(d)
                 });
                 if (mockedData === undefined){
